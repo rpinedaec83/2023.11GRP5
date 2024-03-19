@@ -47,11 +47,11 @@ app.get("/",(req,res)=>{
     res.send("Hola");
 })
 
-server.keepAliveTimeout = 120 * 1000;
-server.headersTimeout = 120 * 1000;
+
   // set port, listen for requests
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
+server.keepAliveTimeout = 120 * 1000;
+server.headersTimeout = 120 * 1000;
 
 function initial() {
     Role.estimatedDocumentCount((err, count) => {
