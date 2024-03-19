@@ -1,61 +1,90 @@
 const express = require("express");
-const app = express();
+const cors = require("cors");
+const cookieSession = require("cookie-session");
 const port = process.env.PORT || 3001;
+const app = express();
+const dbConfig = require("./app/config/db.config");
+// parse requests of content-type - application/json
+app.use(express.json());
 
-app.get("/", (req, res) => res.type('html').send(html));
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.use(
+    cookieSession({
+      name: "bezkoder-session",
+      keys: ["COOKIE_SECRET"], // should use as secret environment variable
+      httpOnly: true
+    })
+  );
+
+
+
+  const db = require("./app/models");
+  const Role = db.role;
+
+
+  db.mongoose
+  .connect(`mongodb+srv://rpineda:vmZWbyG1oaZ29Lc3@cluster0.tya8ibb.mongodb.net/`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log("Successfully connect to MongoDB.");
+    initial();
+  })
+  .catch(err => {
+    console.error("Connection error", err);
+    process.exit();
+  });
+
+  
+require("./app/routes/auth.routes")(app);
+require("./app/routes/user.routes")(app);
+
+
+app.get("/",(req,res)=>{
+    res.send("Hola");
+})
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
+  // set port, listen for requests
+const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
-const html = `
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello from Render!</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <script>
-      setTimeout(() => {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          disableForReducedMotion: true
-        });
-      }, 500);
-    </script>
-    <style>
-      @import url("https://p.typekit.net/p.css?s=1&k=vnd5zic&ht=tk&f=39475.39476.39477.39478.39479.39480.39481.39482&a=18673890&app=typekit&e=css");
-      @font-face {
-        font-family: "neo-sans";
-        src: url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff2"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("woff"), url("https://use.typekit.net/af/00ac0a/00000000000000003b9b2033/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3") format("opentype");
-        font-style: normal;
-        font-weight: 700;
-      }
-      html {
-        font-family: neo-sans;
-        font-weight: 700;
-        font-size: calc(62rem / 16);
-      }
-      body {
-        background: white;
-      }
-      section {
-        border-radius: 1em;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%);
-      }
-    </style>
-  </head>
-  <body>
-    <section>
-      Hello from Render desde el grupo 5!
-    </section>
-  </body>
-</html>
-`
+
+function initial() {
+    Role.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+          new Role({
+            name: "user"
+          }).save(err => {
+            if (err) {
+              console.log("error", err);
+            }
+    
+            console.log("added 'user' to roles collection");
+          });
+    
+          new Role({
+            name: "moderator"
+          }).save(err => {
+            if (err) {
+              console.log("error", err);
+            }
+    
+            console.log("added 'moderator' to roles collection");
+          });
+    
+          new Role({
+            name: "admin"
+          }).save(err => {
+            if (err) {
+              console.log("error", err);
+            }
+    
+            console.log("added 'admin' to roles collection");
+          });
+        }
+      });
+}
