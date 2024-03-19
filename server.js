@@ -4,6 +4,7 @@ const cookieSession = require("cookie-session");
 const port = process.env.PORT || 3001;
 const app = express();
 const dbConfig = require("./app/config/db.config");
+require('dotenv').config();
 // parse requests of content-type - application/json
 app.use(express.json());
 
@@ -25,7 +26,7 @@ app.use(
 
 
   db.mongoose
-  .connect(`mongodb+srv://rpineda:vmZWbyG1oaZ29Lc3@cluster0.tya8ibb.mongodb.net/`, {
+  .connect(process.env.DBCONN, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
