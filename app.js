@@ -54,7 +54,7 @@ const html = `
   </head>
   <body>
     <section>
-      Hello from Render desde PachaQtc!
+      Hello from Render desde el grupo 5!
     </section>
   </body>
 </html>
