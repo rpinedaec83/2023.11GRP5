@@ -42,6 +42,9 @@ app.use(
   
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/categoria.routes")(app);
+require("./app/routes/curso.routes")(app);
+require("./app/routes/cupon.routes")(app);
 
 
 app.get("/",(req,res)=>{
