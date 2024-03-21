@@ -79,3 +79,25 @@ exports.getById = (req,res)=>{
         res.status(400).send(err);
     }
 };
+
+exports.getByFiltros=(req,res)=>{
+    try {
+        const { curso } = req.body;
+        const filtro = {};
+        if (curso) {
+            filtro.titulo = { $regex: '.*' + curso + '.*' };
+        }
+        Curso.findOne(filtro).then((data) => {
+            const idCurso = data._id;
+            Cupon.find({curso:idCurso}).then((cupones)=>{
+                res.send(cupones);
+            },(err)=>{
+                res.status(404).send(err);
+            });
+        }, (err) => {
+            res.status(404).send(err);
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};

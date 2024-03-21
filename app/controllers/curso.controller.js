@@ -80,3 +80,22 @@ exports.getById=(req,res)=>{
         res.status(400).send(error.message);
     }
 };
+exports.getByFiltros=(req,res)=>{
+    try {
+        const { titulo, descripcion } = req.body;
+        const filtro = {};
+        if (titulo) {
+            filtro.titulo = { $regex: '.*' + titulo + '.*' };
+        }
+        if (descripcion) {
+            filtro.descripcion = { $regex: '.*' + descripcion + '.*' };
+        }
+        Curso.findOne(filtro).then((data) => {
+            res.send(data);
+        }, (err) => {
+            res.status(404).send(err);
+        });
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+};
