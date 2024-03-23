@@ -10,6 +10,7 @@ db.role = require("./role.model");
 db.curso = require("./curso.model");
 db.categoria = require("./categoria.model");
 db.cupon = require("./cupon.model");
+db.checkout = require("./checkout.model");
 
 db.ROLES = ["user", "admin", "moderator"];
 

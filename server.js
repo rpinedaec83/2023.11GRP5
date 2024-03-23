@@ -45,6 +45,7 @@ require("./app/routes/user.routes")(app);
 require("./app/routes/categoria.routes")(app);
 require("./app/routes/curso.routes")(app);
 require("./app/routes/cupon.routes")(app);
+require("./app/routes/checkout.routes")(app);
 
 
 app.get("/",(req,res)=>{

@@ -4,8 +4,9 @@ const Curso = db.curso;
 
 exports.post = (req,res)=>{
     try {
-        const {codigo,descuento,curso} = req.body;
-        if(!codigo||!descuento||!curso){throw new Error("Formato incorrecto!");}
+        const {descuento,curso} = req.body;
+        if(!descuento||!curso){throw new Error("Formato incorrecto!");}
+        const codigo = Math.random().toString(30).substring(2);
         Curso.findById(curso).then((data)=>{
             if(data){
                 const objCupon = {codigo,descuento,curso};
